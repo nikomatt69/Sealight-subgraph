@@ -1,0 +1,62 @@
+specVersion: 0.0.2
+description: sealightswap is a decentralized protocol for automated token exchange on Matic.
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Factory
+    network: matic
+    source:
+      address: "0xb10f2D34409D8BD78e1c11b719bBb2E8BBaF6274"
+      abi: Factory
+      startBlock: 5484576
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: Factory/Factory.wasm
+      entities:
+        - Pair
+        - Token
+      abis:
+        - name: Factory
+          file: Factory/abis/SealightSwapv2.json
+        - name: ERC20
+          file: Factory/abis/ERC20.json
+        - name: ERC20SymbolBytes
+          file: Factory/abis/ERC20SymbolBytes.json
+        - name: ERC20NameBytes
+          file: Factory/abis/ERC20NameBytes.json
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleNewPair
+templates:
+  - kind: ethereum/contract
+    name: Pair
+    network: matic
+    source:
+      abi: Pair
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: templates/Pair/Pair.wasm
+      entities:
+        - Pair
+        - Token
+      abis:
+        - name: Pair
+          file: Pair/abis/pair.json
+        - name: Factory
+          file: Pair/abis/SealightSwapv2.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleMint
+        - event: Burn(indexed address,uint256,uint256,indexed address)
+          handler: handleBurn
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleSwap
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Sync(uint112,uint112)
+          handler: handleSync
