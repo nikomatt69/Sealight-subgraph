@@ -1,4 +1,4 @@
-# QuickSwap Subgraph
+# Sealight Subgraph
 
 This repository has been forked from [UniswapV2]()
 
@@ -16,7 +16,7 @@ Make sure to update package.json settings to point to your own graph account.
 
 ## Key Entity Overviews
 
-#### QuickSwapFactory
+#### SealightFactory
 
 Contains data across all of QuickSwap V2. This entity tracks important things like total liquidity (in ETH and USD, see below), all time volume, transaction count, number of pairs and more.
 
